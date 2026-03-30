@@ -115,6 +115,8 @@
 
 <img width="1111" height="810" alt="image" src="https://github.com/user-attachments/assets/e11381ad-e158-4a47-bd4b-fb7f91143292" />
 
+<img width="1151" height="971" alt="image" src="https://github.com/user-attachments/assets/ec60516a-14b0-419e-889c-3aa2cabd9f6b" />
+
 
 ```
 Поле для вставки кода...
