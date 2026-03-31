@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  prometheus:
+    image: prom/prometheus
+    container_name: anastasiev-da-netology-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+      - /opt/prometheus/data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+    networks:
+      anastasiev-da-my-netology-hw:
+        ipv4_address: 10.5.0.2
+
+  pushgateway:
+    image: prom/pushgateway
+    container_name: anastasiev-da-netology-pushgateway
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    ports:
+      - "9091:9091"
+    networks:
+      anastasiev-da-my-netology-hw:
+        ipv4_address: 10.5.0.3
+
+  grafana:
+    image: grafana/grafana
+    container_name: anastasiev-da-netology-grafana
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+    ports:
+      - "80:3000"
+    environment:
+      - GF_PATHS_CONFIG=/etc/grafana/grafana.ini
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/:/etc/grafana/
+    networks:
+      anastasiev-da-my-netology-hw:
+        ipv4_address: 10.5.0.4
+
+  alertmanager:
+    image: prom/alertmanager
+    container_name: anastasiev-da-netology-alertmanager
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./alertmanager/:/etc/alertmanager/
+      - alertmanager-data:/alertmanager
+    networks:
+      anastasiev-da-my-netology-hw:
+        ipv4_address: 10.5.0.5
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+
+volumes:
+  prometheus-data:
+    external: true
+  grafana-data:
+  alertmanager-data:
+
+networks:
+  anastasiev-da-my-netology-hw:
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.5.0.0/16
+          gateway: 10.5.0.1

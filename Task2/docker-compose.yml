@@ -1,14 +1,8 @@
 version: '3.8'
 
 services:
-  app:
-    image: nginx:latest
-    networks:
-      anastasiev-da-my-netology-hw:
-        ipv4_address: 10.5.0.2
 
 volumes:
-  app-data: {}
 
 networks:
   anastasiev-da-my-netology-hw:
